@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <link href="{{ url_for('static', filename='/style.css') }}" rel="stylesheet" />
+    <title>Mofang Chinese</title>
+
+</head>
+<body>
+
+<!-- Begin page content -->
+
+<header class="header">
+    <div class="container">
+        <div class="header_inner">
+            <nav>
+                {% if current_user.is_authenticated %}
+                <a class="navbar-brand" href="/profile/{{ current_user.id }}">
+                    {{ current_user.name}}</a>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <div class="nav" id="up buttons">
+                    <a id="nav button 1" class="btn btn-white" href="/courses">Мои Курсы</a>
+                    <a id="nav button 2" class="btn btn-white" href="/dictionary">Словарь</a>
+                    {% if current_user.teacher %}
+                    <a id="nav button 3" class="btn btn-white" href="/pupils">Мои ученики</a>
+                    {% endif %}
+                    <a class="btn btn-primary" id="back_button"
+                       href="{{ back_url }}" hidden>Назад</a>
+                </div>
+                {% endif %}
+
+            </nav>
+        </div>
+    </div>
+</header>
+<main role="main" class="container">
+    <script>
+        for (let i = 1; i < 4; i++){
+            nav_button = document.getElementById("nav button " + i.toString());
+            if (nav_button != null){
+                if (location.href == nav_button.href){
+                    nav_button.classList.remove("btn-white");
+                    nav_button.classList.add("btn-primary");
+                }
+            }
+        }
+
+        back_button = document.getElementById("back_button")
+        back_button.hidden = {{ back_button_hidden }};
+        document.addEventListener("keydown", function(event) {
+            if (event.key == "Backspace" && document.activeElement.nodeName != "INPUT" && document.activeElement.nodeName != "TEXTAREA") {
+            location.href = '{{ back_url }}';
+            }
+            // console.log(document.activeElement.nodeName);
+        })
+    </script>
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>
